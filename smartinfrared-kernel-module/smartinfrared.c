@@ -103,7 +103,7 @@ static ssize_t attr_show(struct kobject *sys_obj, struct kobj_attribute *attr, c
     printk(KERN_INFO "SmartInfrared: Lendo %s ...\n", attr_name);
 
 
-    if (strcmp(attr_name, "led") == 0) {
+    if (strcmp(attr_name, "sig") == 0) {
         value = usb_send_cmd("GET_SIG", -1); 
     } else {
         return -EINVAL; 
@@ -204,13 +204,13 @@ static int usb_write_serial(const char *cmd, int param) {
     response_value = usb_read_serial();
    
     if (strncmp(resp_expected, "RES GET_SIG", strlen("RES GET_SIG")) == 0) {
-        printk(KERN_INFO "SmartInfrared: Valor do LED recebido: %d\n", response_value);
+        printk(KERN_INFO "SmartInfrared: Valor do SINAL recebido: %d\n", response_value);
     }
     else if (strncmp(resp_expected, "RES SET_SIG", strlen("RES SET_SIG")) == 0) {
         if (response_value == 1) {
-            printk(KERN_INFO "SmartInfrared: LED ajustado com sucesso.\n");
+            printk(KERN_INFO "SmartInfrared: SINAL ajustado com sucesso.\n");
         } else {
-            printk(KERN_ERR "SmartInfrared: Falha ao ajustar o LED.\n");
+            printk(KERN_ERR "SmartInfrared: Falha ao ajustar o SINAL.\n");
         }
     }
     else {
@@ -264,16 +264,16 @@ static int usb_read_serial(void) {
             if (strncmp(start_ptr, "RES GET_SIG", strlen("RES GET_SIG")) == 0) {
             
                 sig_value = simple_strtol(start_ptr + strlen("RES GET_SIG "), NULL, 10);
-                printk(KERN_INFO "SmartInfrared: LED Value recebido: %d\n", sig_value);
+                printk(KERN_INFO "SmartInfrared: SINAL Value recebido: %d\n", sig_value);
                 return sig_value;
             } 
             else if (strncmp(start_ptr, "RES SET_SIG", strlen("RES SET_SIG")) == 0) {
             
                 int SET_SIG_status = simple_strtol(start_ptr + strlen("RES SET_SIG "), NULL, 10);
                 if (SET_SIG_status == 1) {
-                    printk(KERN_INFO "SmartInfrared: LED atualizado com sucesso.\n");
+                    printk(KERN_INFO "SmartInfrared: SINAL atualizado com sucesso.\n");
                 } else {
-                    printk(KERN_ERR "SmartInfrared: Erro ao atualizar LED.\n");
+                    printk(KERN_ERR "SmartInfrared: Erro ao atualizar SINAL.\n");
                 }
                 return SET_SIG_status;
             } 
