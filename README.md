@@ -1,4 +1,4 @@
-# DevTITANS 06 - HandsOn Final - Equipe 0X
+# DevTITANS 06 - HandsOn Final - Equipe 03
 
 Bem-vindo ao repositório da Equipe 03 no DevTITANS. Neste repositório apresentamos nosso projeto com os sensores emissor e receptor Infravermelho.
 
