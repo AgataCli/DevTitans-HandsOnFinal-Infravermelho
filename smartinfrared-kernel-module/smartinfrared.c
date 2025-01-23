@@ -83,7 +83,7 @@ static int usb_write_serial(const char *cmd) {
 
     snprintf(usb_out_buffer, usb_max_size, "%s", cmd);
     ret = usb_bulk_msg(smartinfrared_device, usb_sndbulkpipe(smartinfrared_device, usb_out),
-                       usb_out_buffer, strlen(usb_out_buffer), &actual_size, 1000);
+                       usb_out_buffer, strlen(usb_out_buffer), &actual_size, 5000);
     if (ret) {
         printk(KERN_ERR "SmartInfrared: Falha ao enviar comando. Código: %d\n", ret);
     }
@@ -91,14 +91,17 @@ static int usb_write_serial(const char *cmd) {
 }
 
 static int usb_read_serial(char *response, size_t size) {
+    
     int ret, actual_size, attempts = 0;
     char full_response[MAX_RECV_LINE] = {0};
     char *newline_ptr, *start_ptr;
 
-    while (attempts < 20) {
+    while (attempts < 50) {
         ret = usb_bulk_msg(smartinfrared_device, usb_rcvbulkpipe(smartinfrared_device, usb_in),
-                           usb_in_buffer, usb_max_size, &actual_size, 1000);
+                           usb_in_buffer, usb_max_size, &actual_size, 5000);
         if (ret) {
+            printk(KERN_INFO "SmartInfrared: Dados que deram errado: %s\n", usb_in_buffer);
+
             printk(KERN_ERR "SmartInfrared: Falha ao ler resposta. Código: %d\n", ret);
             return -1;
         }
@@ -107,18 +110,18 @@ static int usb_read_serial(char *response, size_t size) {
         strncat(full_response, usb_in_buffer, sizeof(full_response) - strlen(full_response) - 1);
 
         newline_ptr = strchr(full_response, '\n');
-        if (newline_ptr) {
+       if (newline_ptr) {
             *newline_ptr = '\0';
             if (strncmp(full_response, "RECV_", 5) == 0 || strncmp(full_response, "SEND_", 5) == 0) {
                 snprintf(response, size, "%s", full_response);
                 return 0;
             } else {
-                printk(KERN_INFO "SmartInfrared: Dados não reconhecidos, tentando novamente...\n");
-                attempts++;
+                printk(KERN_INFO "SmartInfrared: Resposta parcial ou inválida: %s\n", full_response);
                 memset(full_response, 0, sizeof(full_response));
                 continue;
             }
-        }
+}
+
 
         attempts++;
     }
