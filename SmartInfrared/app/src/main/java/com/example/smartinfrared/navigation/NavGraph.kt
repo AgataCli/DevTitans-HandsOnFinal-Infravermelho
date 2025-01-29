@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.smartinfrared.ui.screens.CreateControlScreen
 import com.example.smartinfrared.ui.screens.HomeScreen
 import com.example.smartinfrared.ui.screens.SavedCommandsScreen
 
@@ -23,6 +24,10 @@ fun NavGraph(
 
         composable(Routes.COMMANDS) { // rota da tela de comandos salvos
             SavedCommandsScreen(navController)
+        }
+
+        composable(Routes.CREATE_CONTROL) { // rota da tela de criar controles
+            CreateControlScreen(navController)
         }
     }
 }

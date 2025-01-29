@@ -103,11 +103,22 @@ fun SideMenu(
             )
 
 
-
-//            MenuItem(
-//                "Crie o Seu",
-//                onClick = TODO()
-//            )
+            MenuItem(
+                "Crie o Seu",
+                onClick = {
+                    try {
+                        navController.navigate(Routes.CREATE_CONTROL) {
+                            popUpTo(Routes.CREATE_CONTROL) {
+                                saveState = true
+                            }
+                            var launchSingleTop = true
+                        }
+                        onCloseMenu()
+                    } catch (e: Exception) {
+                        println("Erro na navegacao: ${e.message}")
+                    }
+                }
+            )
 //
 //
 //            MenuItem(
