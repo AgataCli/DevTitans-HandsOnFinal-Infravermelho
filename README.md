@@ -32,7 +32,7 @@ Os recursos necessários para desenvolvermos o protótipo foram os seguintes:
 ## Contato
 
 Para perguntas, sugestões ou feedback, entre em contato com um dos mantenedores do projeto em: 
-- [Ágata](example@example.com)
+- [Ágata](agata.brazao@icomp.ufam.edu.br)
 - [Bianka](bianka.vm03@gmail.com)
 - [Fernanda](example@example.com)
 - [Juan](example@example.com)
