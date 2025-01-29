@@ -1,123 +1,111 @@
+// SideMenu.kt
 package com.example.smartinfrared.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Create
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Divider
-import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.smartinfrared.ui.theme.SmartInfraredTheme
 
-data class MenuItem(
-    val title: String,
-    val icon: ImageVector,
-    val selected: Boolean = false
-)
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SideMenu(
-    drawerState: DrawerState?,
-    onItemSelected: (() -> Unit)? = {},
-    onClose: (() -> Unit)? = {}
+    modifier: Modifier = Modifier,
+    onCloseMenu: () -> Unit
 ) {
-    // Itens do menu
-    val menuItems = listOf(
-        MenuItem(
-            title = "Menu Inicial",
-            icon = Icons.Default.Home
-        ),
-        MenuItem(
-            title = "Crie o Seu",
-            icon = Icons.Default.Create
-        ),
-        MenuItem(
-            title = "Comandos",
-            icon = Icons.Default.List
-        ),
-        MenuItem(
-            title = "Controles",
-            icon = Icons.Default.Settings
-        ),
-        MenuItem(
-            title = "Saiba Mais",
-            icon = Icons.Default.Info
-        )
-    )
-
-    ModalDrawerSheet(
-        modifier = Modifier.fillMaxSize()
+    Box(
+        modifier = modifier
+            .width(240.dp)
+            .fillMaxHeight()
+            .background(MaterialTheme.colorScheme.surface)
     ) {
-        // Cabeçalho do menu
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = "Smart Infrared",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = "Controle seus dispositivos",
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-
-        Divider()
-
-        // Itens de navegação
-        Column(modifier = Modifier.padding(8.dp)) {
-            menuItems.forEach { item ->
-                NavigationDrawerItem(
-                    icon = {
-                        Icon(
-                            imageVector = item.icon,
-                            contentDescription = item.title
-                        )
-                    },
-                    label = {
-                        Text(text = item.title)
-                    },
-                    selected = item.selected,
-                    onClick = {
-                        onItemSelected?.let { it() }
-                        onClose?.let { it() }
-                    },
-                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+        ) {
+            // Cabeçalho do menu
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(bottom = 24.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Fechar menu",
+                    modifier = Modifier
+                        .clickable { onCloseMenu() }
+                        .padding(end = 8.dp)
                 )
-
-                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Menu",
+                    style = MaterialTheme.typography.titleMedium
+                )
             }
+
+            Divider()
+
+            // Itens do menu
+            MenuItem("Menu Inicial")
+            MenuItem("Crie o Seu")
+            MenuItem("Comandos")
+            MenuItem("Controles")
+            MenuItem("Saiba Mais")
         }
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun SideMenuPreview() {
-    SmartInfraredTheme {
-        SideMenu(
-            drawerState = null,
-            onItemSelected = null,
-            onClose = null
-        )
-    }
+private fun MenuItem(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodyLarge,
+        color = MaterialTheme.colorScheme.onSurface,
+        modifier = Modifier
+            .clickable { /* Ação futura */ }
+            .padding(vertical = 12.dp)
+    )
+}
+
+// TopAppBar com botão do menu
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppTopBar(
+    onMenuClick: () -> Unit
+) {
+    TopAppBar(
+        title = { Text("SmartInfrared") },
+        navigationIcon = {
+            IconButton(onClick = onMenuClick) {
+                Icon(
+                    imageVector = Icons.Default.Menu,
+                    contentDescription = "Abrir menu"
+                )
+            }
+        }
+    )
 }
