@@ -71,7 +71,7 @@ fun SideMenu(
                 )
             }
 
-            Divider()
+            //Divider()
 
             // Itens do menu
             MenuItem(
