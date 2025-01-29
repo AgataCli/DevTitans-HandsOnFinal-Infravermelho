@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-//import com.example.smartinfrared.ui.screens.HomeScreen
+import com.example.smartinfrared.ui.screens.HomeScreen
 
 @Composable
 fun NavGraph(
@@ -16,9 +16,9 @@ fun NavGraph(
         navController = navController,
         startDestination = startDestination
     ) {
-        composable("home") { // Rota da tela inicial
-            //HomeScreen() // Você precisará criar esta tela depois
+        composable("home") { // rota da tela inicial
+            HomeScreen()
         }
-        // Adicione outras rotas aqui posteriormente
+        // adicionar outras rotas
     }
 }
