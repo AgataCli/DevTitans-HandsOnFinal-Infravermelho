@@ -33,10 +33,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import com.example.smartinfrared.navigation.Routes
 
 @Composable
 fun SideMenu(
     modifier: Modifier = Modifier,
+    navController: NavHostController,
     onCloseMenu: () -> Unit
 ) {
     Box(
@@ -70,23 +74,70 @@ fun SideMenu(
             Divider()
 
             // Itens do menu
-            MenuItem("Menu Inicial")
-            MenuItem("Crie o Seu")
-            MenuItem("Comandos")
-            MenuItem("Controles")
-            MenuItem("Saiba Mais")
+            MenuItem(
+                text = "Menu Inicial",
+                onClick = {
+                    navController.navigate(Routes.HOME) {
+                        popUpTo(navController.graph.startDestinationId)
+                        var lauchSingleTop = true
+                    }
+                    onCloseMenu()
+                }
+            )
+
+            MenuItem(
+                "Comandos",
+                onClick = {
+                    try {
+                        navController.navigate(Routes.COMMANDS) {
+                            popUpTo(Routes.COMMANDS) {
+                                saveState = true
+                            }
+                            var lauchSingleTop = true
+                        }
+                        onCloseMenu()
+                    } catch (e: Exception) {
+                        println("Erro na navegacao: ${e.message}")
+                    }
+                }
+            )
+
+
+
+//            MenuItem(
+//                "Crie o Seu",
+//                onClick = TODO()
+//            )
+//
+//
+//            MenuItem(
+//                "Controles",
+//                onClick = TODO()
+//            )
+//
+//            MenuItem(
+//                "Saiba Mais",
+//                onClick = TODO()
+//            )
+
         }
     }
 }
 
 @Composable
-private fun MenuItem(text: String) {
+private fun MenuItem(
+    text: String,
+    onClick: () -> Unit
+) {
     Text(
         text = text,
         style = MaterialTheme.typography.bodyLarge,
         color = MaterialTheme.colorScheme.onSurface,
         modifier = Modifier
-            .clickable { /* Ação futura */ }
+            .clickable {
+                android.util.Log.d("NAV_DEBUG", "Item clicado: $text")
+                onClick()
+            }
             .padding(vertical = 12.dp)
     )
 }

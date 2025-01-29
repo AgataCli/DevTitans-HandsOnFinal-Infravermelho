@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import com.example.smartinfrared.navigation.NavGraph
+import com.example.smartinfrared.navigation.Routes
 import com.example.smartinfrared.ui.theme.SmartInfraredTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,9 +24,8 @@ class MainActivity : ComponentActivity() {
 private fun MainApp() {
     val navController = rememberNavController() // Controlador de navegação
 
-    // Configuração do sistema de navegação
     NavGraph(
         navController = navController,
-        startDestination = "home" // Tela inicial do app
+        startDestination = Routes.HOME// Tela inicial do app
     )
 }

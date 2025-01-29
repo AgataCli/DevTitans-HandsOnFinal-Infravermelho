@@ -1,4 +1,3 @@
-// HomeScreen.kt
 package com.example.smartinfrared.ui.screens
 
 import androidx.compose.animation.AnimatedVisibility
@@ -21,9 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.navigation.NavHostController
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavHostController) {
     var menuVisible by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -40,7 +40,7 @@ fun HomeScreen() {
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Hello World!",
+                text = "TELA INICIAL!",
                 modifier = Modifier.padding(16.dp)
             )
         }
@@ -53,6 +53,7 @@ fun HomeScreen() {
             modifier = Modifier.zIndex(1f)
         ) {
             SideMenu(
+                navController = navController,
                 onCloseMenu = { menuVisible = false }
             )
         }
