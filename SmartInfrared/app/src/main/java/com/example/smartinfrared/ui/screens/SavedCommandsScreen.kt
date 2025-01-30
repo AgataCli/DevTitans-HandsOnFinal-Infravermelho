@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -26,6 +27,8 @@ import androidx.navigation.NavHostController
 fun SavedCommandsScreen(navController: NavHostController) {
     var menuVisible by remember { mutableStateOf(false) }
     val commands = remember { mutableStateListOf("Comando 1", "Comando 2", "Comando 3", "Comando 4") }
+    var showDialog by remember { mutableStateOf(false) }
+    var newCommand by remember { mutableStateOf(TextFieldValue("")) }
 
     Scaffold(
         topBar = {
@@ -35,8 +38,8 @@ fun SavedCommandsScreen(navController: NavHostController) {
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* Adicionar novo comando */ },
-                containerColor = Color(0xFF673AB7) // Roxo do botão "+"
+                onClick = { showDialog = true },
+                containerColor = Color(0xFF673AB7)
             ) {
                 Text("+", color = Color.White, fontSize = 24.sp)
             }
@@ -100,6 +103,43 @@ fun SavedCommandsScreen(navController: NavHostController) {
                     }
                 }
             }
+        }
+
+        // Pop-up de adicionar comando
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                title = { Text("Novo Comando") },
+                text = {
+                    Column {
+                        Text("Digite o nome do comando:")
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TextField(
+                            value = newCommand,
+                            onValueChange = { newCommand = it },
+                            singleLine = true
+                        )
+                    }
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = { // adicionar aqui a função de receber sinal
+                            if (newCommand.text.isNotBlank()) {
+                                commands.add(newCommand.text)
+                                newCommand = TextFieldValue("") // Limpa o campo
+                                showDialog = false
+                            }
+                        }
+                    ) {
+                        Text("Receber")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showDialog = false }) {
+                        Text("Cancelar")
+                    }
+                }
+            )
         }
 
         AnimatedVisibility(
