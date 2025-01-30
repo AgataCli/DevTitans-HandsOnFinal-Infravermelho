@@ -5,25 +5,18 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -32,38 +25,83 @@ import androidx.navigation.NavHostController
 @Composable
 fun SavedCommandsScreen(navController: NavHostController) {
     var menuVisible by remember { mutableStateOf(false) }
+    val commands = remember { mutableStateListOf("Comando 1", "Comando 2", "Comando 3", "Comando 4") }
 
     Scaffold(
         topBar = {
             AppTopBar(
                 onMenuClick = { menuVisible = true }
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { /* Adicionar novo comando */ },
+                containerColor = Color(0xFF673AB7) // Roxo do botão "+"
+            ) {
+                Text("+", color = Color.White, fontSize = 24.sp)
+            }
         }
     ) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.TopCenter
         ) {
-//            Spacer(modifier = Modifier.height(16.dp))
-            Column {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // Cabeçalho
                 Box(
                     modifier = Modifier
-                        .background(Color(0xFFAF5454))
                         .fillMaxWidth()
-                        .padding(horizontal = 30.dp, vertical = 16.dp)
+                        .background(Color(0xFFAF5454))
+                        .padding(16.dp)
                 ) {
                     Text("Comandos Salvos", color = Color.White, fontSize = 20.sp)
                 }
+
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Text("Adicione, Envie ou Exclua um comando:")
-            }
+                Text("Adicione, Envie ou Exclua um comando:", fontSize = 16.sp)
 
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Lista de comandos
+                commands.forEach { command ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(0.9f)
+                            .padding(8.dp)
+                            .background(Color(0xFFEDE7F6))
+                            .padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(command, modifier = Modifier.weight(1f), fontSize = 16.sp, color = Color.Black)
+
+                        // Botão de enviar
+                        IconButton(onClick = { /* Enviar comando */ }) {
+                            Icon(
+                                imageVector = Icons.Default.PlayArrow,
+                                contentDescription = "Enviar",
+                                tint = Color(0xFF673AB7)
+                            )
+                        }
+
+                        // Botão de excluir
+                        IconButton(onClick = { commands.remove(command) }) { // remover comando
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Excluir",
+                                tint = Color(0xFF673AB7)
+                            )
+                        }
+                    }
+                }
+            }
         }
 
-        // Menu lateral animado
         AnimatedVisibility(
             visible = menuVisible,
             enter = slideInHorizontally(animationSpec = tween(300)) { -it },
