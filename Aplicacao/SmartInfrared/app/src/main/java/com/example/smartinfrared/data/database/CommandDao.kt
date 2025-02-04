@@ -22,5 +22,5 @@ interface CommandDao {
     fun deleteById(commandId: Int)
 
     @Delete
-    fun delete(command: CommandEntity)
+    suspend fun delete(command: CommandEntity)
 }
