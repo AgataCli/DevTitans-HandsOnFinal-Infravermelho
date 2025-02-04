@@ -7,6 +7,8 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -31,7 +33,6 @@ import com.example.smartinfrared.ui.viewmodel.SavedCommandsViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 
 @Composable
 fun SavedCommandsScreen(navController: NavHostController) {
@@ -82,32 +83,38 @@ fun SavedCommandsScreen(navController: NavHostController) {
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Lista de comandos
-                commands.forEach { command ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(0.9f)
-                            .padding(8.dp)
-                            .background(Color(0xFFEDE7F6))
-                            .padding(12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(command.name, modifier = Modifier.weight(1f), fontSize = 16.sp, color = Color.Black)
+                // Adicionando LazyColumn para rolagem
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                ) {
+                    items(commands) { command ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(0.9f)
+                                .padding(8.dp)
+                                .background(Color(0xFFEDE7F6))
+                                .padding(12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(command.name, modifier = Modifier.weight(1f), fontSize = 16.sp, color = Color.Black)
 
-                        IconButton(onClick = { /* Enviar comando */ }) {
-                            Icon(
-                                imageVector = Icons.Default.PlayArrow,
-                                contentDescription = "Enviar",
-                                tint = Color(0xFF673AB7)
-                            )
-                        }
+                            IconButton(onClick = { /* Enviar comando */ }) {
+                                Icon(
+                                    imageVector = Icons.Default.PlayArrow,
+                                    contentDescription = "Enviar",
+                                    tint = Color(0xFF673AB7)
+                                )
+                            }
 
-                        IconButton(onClick = { viewModel.deleteCommand(command) }) {
-                            Icon(
-                                imageVector = Icons.Default.Close,
-                                contentDescription = "Excluir",
-                                tint = Color(0xFF673AB7)
-                            )
+                            IconButton(onClick = { viewModel.deleteCommand(command) }) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = "Excluir",
+                                    tint = Color(0xFF673AB7)
+                                )
+                            }
                         }
                     }
                 }
@@ -168,3 +175,4 @@ fun SavedCommandsScreen(navController: NavHostController) {
         }
     }
 }
+
