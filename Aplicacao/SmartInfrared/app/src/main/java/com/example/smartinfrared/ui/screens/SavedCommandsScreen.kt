@@ -27,29 +27,17 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.example.smartinfrared.data.database.CommandEntity
 import com.example.smartinfrared.data.repository.CommandRepository
+import com.example.smartinfrared.ui.viewmodel.SavedCommandsViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-//@HiltViewModel
-//class SavedCommandsViewModel @Inject constructor(
-//    private val repository: CommandRepository
-//) : ViewModel() {
-//    val commands = repository.getAllCommands().collectAsState(initial = emptyList())
-//
-//    fun deleteCommand(command: CommandEntity) {
-//        viewModelScope.launch {
-//            repository.deleteCommand(command)
-//        }
-//    }
-//}
 
 @Composable
 fun SavedCommandsScreen(navController: NavHostController) {
-//    val viewModel: SavedCommandsViewModel = hiltViewModel()
-//    val commands by viewModel.commands
+    val viewModel: SavedCommandsViewModel = hiltViewModel()
+    val commands by viewModel.commands.collectAsState(initial = emptyList())
     var menuVisible by remember { mutableStateOf(false) }
-    val commands = remember { mutableStateListOf("Comando 1", "Comando 2", "Comando 3", "Comando 4") }
     var showDialog by remember { mutableStateOf(false) }
     var newCommand by remember { mutableStateOf(TextFieldValue("")) }
 
@@ -104,9 +92,8 @@ fun SavedCommandsScreen(navController: NavHostController) {
                             .padding(12.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(command, modifier = Modifier.weight(1f), fontSize = 16.sp, color = Color.Black)
+                        Text(command.name, modifier = Modifier.weight(1f), fontSize = 16.sp, color = Color.Black)
 
-                        // Botão de enviar
                         IconButton(onClick = { /* Enviar comando */ }) {
                             Icon(
                                 imageVector = Icons.Default.PlayArrow,
@@ -115,8 +102,7 @@ fun SavedCommandsScreen(navController: NavHostController) {
                             )
                         }
 
-                        // Botão de excluir
-                        IconButton(onClick = { commands.remove(command) }) { // remover comando
+                        IconButton(onClick = { viewModel.deleteCommand(command) }) {
                             Icon(
                                 imageVector = Icons.Default.Close,
                                 contentDescription = "Excluir",
@@ -128,7 +114,6 @@ fun SavedCommandsScreen(navController: NavHostController) {
             }
         }
 
-        // Pop-up de adicionar comando
         if (showDialog) {
             AlertDialog(
                 onDismissRequest = { showDialog = false },
@@ -146,15 +131,20 @@ fun SavedCommandsScreen(navController: NavHostController) {
                 },
                 confirmButton = {
                     TextButton(
-                        onClick = { // adicionar aqui a função de receber sinal
+                        onClick = {
                             if (newCommand.text.isNotBlank()) {
-                                commands.add(newCommand.text)
-                                newCommand = TextFieldValue("") // Limpa o campo
+                                viewModel.insertCommand(
+                                    CommandEntity(
+                                        name = newCommand.text,
+                                        signalPattern = "" // Adicione o padrão de sinal aqui
+                                    )
+                                )
+                                newCommand = TextFieldValue("")
                                 showDialog = false
                             }
                         }
                     ) {
-                        Text("Receber")
+                        Text("Salvar")
                     }
                 },
                 dismissButton = {

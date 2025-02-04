@@ -2,7 +2,6 @@ package com.example.smartinfrared.data
 
 import android.content.Context
 import androidx.room.Room
-import com.example.smartinfrared.data.database.AppDatabase
 import com.example.smartinfrared.data.database.CommandDao
 import com.example.smartinfrared.data.database.ControlDao
 import com.example.smartinfrared.data.repository.CommandRepository
@@ -31,12 +30,12 @@ object DiModule {
     @Provides
     fun provideCommandDao(database: AppDatabase) = database.commandDao()
 
-    @Provides
-    fun provideControlDao(database: AppDatabase) = database.controlDao()
+    //@Provides
+    //fun provideControlDao(database: AppDatabase) = database.controlDao()
 
     @Provides
     fun provideCommandRepository(dao: CommandDao) = CommandRepository(dao)
 
-    @Provides
-    fun provideControlRepository(dao: ControlDao) = ControlRepository(dao)
+//    @Provides
+//    fun provideControlRepository(dao: ControlDao) = ControlRepository(dao)
 }

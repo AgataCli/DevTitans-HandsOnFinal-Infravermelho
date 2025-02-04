@@ -8,7 +8,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.smartinfrared.navigation.NavGraph
 import com.example.smartinfrared.navigation.Routes
 import com.example.smartinfrared.ui.theme.SmartInfraredTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
