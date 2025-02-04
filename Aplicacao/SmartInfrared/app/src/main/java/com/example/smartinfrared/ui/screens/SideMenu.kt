@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -25,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -125,11 +128,16 @@ fun SideMenu(
 //                "Controles",
 //                onClick = TODO()
 //            )
-//
-//            MenuItem(
-//                "Saiba Mais",
-//                onClick = TODO()
-//            )
+
+
+            val shouldShowDialog = remember { mutableStateOf(false) }
+            if (shouldShowDialog.value) {
+                SobreAlertDialog(shouldShowDialog = shouldShowDialog)
+            }
+            MenuItem(
+                "Saiba Mais",
+                onClick = { shouldShowDialog.value = true  }
+            )
 
         }
     }
@@ -151,6 +159,37 @@ private fun MenuItem(
             }
             .padding(vertical = 12.dp)
     )
+}
+
+
+@Composable
+fun SobreAlertDialog(shouldShowDialog: MutableState<Boolean>) {
+    if (shouldShowDialog.value) {
+        AlertDialog(
+            onDismissRequest = {
+                shouldShowDialog.value = false
+            },
+            title = { Text(text = "Sobre o SmartInfrared") },
+            text = {
+                Text(text = "Projeto final do DevTitans.\n" +
+                        "Desenvolvido por:\n" +
+                        "Ágata Brasão\n" +
+                        "Bianka Maciel\n" +
+                        "Juan Veiga\n" +
+                        "Maria Fernanda Cabral\n" +
+                        "Mateus Pantoja\n" +
+                        "José Inácio\n")
+            },
+
+            confirmButton = {
+                Button(
+                    onClick = { shouldShowDialog.value = false }
+                ) {
+                    Text(text = "Ok")
+                }
+            }
+        )
+    }
 }
 
 // TopAppBar com botão do menu

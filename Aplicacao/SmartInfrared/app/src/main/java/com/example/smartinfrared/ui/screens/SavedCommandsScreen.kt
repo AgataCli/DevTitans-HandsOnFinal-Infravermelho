@@ -21,10 +21,33 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
+import com.example.smartinfrared.data.database.CommandEntity
+import com.example.smartinfrared.data.repository.CommandRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+//@HiltViewModel
+//class SavedCommandsViewModel @Inject constructor(
+//    private val repository: CommandRepository
+//) : ViewModel() {
+//    val commands = repository.getAllCommands().collectAsState(initial = emptyList())
+//
+//    fun deleteCommand(command: CommandEntity) {
+//        viewModelScope.launch {
+//            repository.deleteCommand(command)
+//        }
+//    }
+//}
 
 @Composable
 fun SavedCommandsScreen(navController: NavHostController) {
+//    val viewModel: SavedCommandsViewModel = hiltViewModel()
+//    val commands by viewModel.commands
     var menuVisible by remember { mutableStateOf(false) }
     val commands = remember { mutableStateListOf("Comando 1", "Comando 2", "Comando 3", "Comando 4") }
     var showDialog by remember { mutableStateOf(false) }

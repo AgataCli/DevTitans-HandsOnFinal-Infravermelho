@@ -26,6 +26,6 @@ private fun MainApp() {
 
     NavGraph(
         navController = navController,
-        startDestination = Routes.CREATE_CONTROL// Tela inicial do app
+        startDestination = Routes.HOME// Tela inicial do app
     )
 }
