@@ -67,6 +67,13 @@ fun SavedCommandsScreen(navController: NavHostController) {
                                 signalPattern = newSignal
                             )
                         )
+
+                        Toast.makeText(
+                            context,
+                            "Salvando o sinal ${newSignal.joinToString(", ")}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+
                         newCommand = TextFieldValue("")
                         newSignal = emptyList()
                         showDialog = false
@@ -225,7 +232,7 @@ fun AddCommandDialog(
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = if (newSignal.isEmpty()) "Nenhum sinal recebido"
-                    else "${newSignal.joinToString(", ")}",
+                    else {newSignal.joinToString(", ")},
                     color = Color.White
                 )
             }
@@ -234,11 +241,6 @@ fun AddCommandDialog(
             TextButton(
                 onClick = {
                     onSave()
-                    Toast.makeText(
-                        context,
-                        "Salvando o sinal ${newSignal.joinToString(", ")}",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
             ) {
                 Text("Salvar")
