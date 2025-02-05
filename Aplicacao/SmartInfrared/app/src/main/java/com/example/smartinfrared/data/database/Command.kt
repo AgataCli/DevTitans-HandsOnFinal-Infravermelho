@@ -7,5 +7,5 @@ import androidx.room.PrimaryKey
 data class CommandEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
-    val signalPattern: String
+    val signalPattern: List<Int>
 )
