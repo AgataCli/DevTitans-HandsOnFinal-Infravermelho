@@ -8,6 +8,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -146,6 +147,7 @@ fun CommandItem(
             .fillMaxWidth(0.9f)
             .padding(8.dp)
             .background(Color(0xFFEDE7F6))
+            .clickable { Toast.makeText(context, "Sinal: ${command.signalPattern.joinToString(", ")}", Toast.LENGTH_SHORT).show() }
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
