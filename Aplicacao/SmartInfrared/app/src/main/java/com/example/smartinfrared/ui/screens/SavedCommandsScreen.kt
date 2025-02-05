@@ -7,6 +7,8 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -27,29 +29,16 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import com.example.smartinfrared.data.database.CommandEntity
 import com.example.smartinfrared.data.repository.CommandRepository
+import com.example.smartinfrared.ui.viewmodel.SavedCommandsViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-//@HiltViewModel
-//class SavedCommandsViewModel @Inject constructor(
-//    private val repository: CommandRepository
-//) : ViewModel() {
-//    val commands = repository.getAllCommands().collectAsState(initial = emptyList())
-//
-//    fun deleteCommand(command: CommandEntity) {
-//        viewModelScope.launch {
-//            repository.deleteCommand(command)
-//        }
-//    }
-//}
-
 @Composable
 fun SavedCommandsScreen(navController: NavHostController) {
-//    val viewModel: SavedCommandsViewModel = hiltViewModel()
-//    val commands by viewModel.commands
+    val viewModel: SavedCommandsViewModel = hiltViewModel()
+    val commands by viewModel.commands.collectAsState(initial = emptyList())
     var menuVisible by remember { mutableStateOf(false) }
-    val commands = remember { mutableStateListOf("Comando 1", "Comando 2", "Comando 3", "Comando 4") }
     var showDialog by remember { mutableStateOf(false) }
     var newCommand by remember { mutableStateOf(TextFieldValue("")) }
 
@@ -94,41 +83,44 @@ fun SavedCommandsScreen(navController: NavHostController) {
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // Lista de comandos
-                commands.forEach { command ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth(0.9f)
-                            .padding(8.dp)
-                            .background(Color(0xFFEDE7F6))
-                            .padding(12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(command, modifier = Modifier.weight(1f), fontSize = 16.sp, color = Color.Black)
+                // Adicionando LazyColumn para rolagem
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                ) {
+                    items(commands) { command ->
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth(0.9f)
+                                .padding(8.dp)
+                                .background(Color(0xFFEDE7F6))
+                                .padding(12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(command.name, modifier = Modifier.weight(1f), fontSize = 16.sp, color = Color.Black)
 
-                        // Botão de enviar
-                        IconButton(onClick = { /* Enviar comando */ }) {
-                            Icon(
-                                imageVector = Icons.Default.PlayArrow,
-                                contentDescription = "Enviar",
-                                tint = Color(0xFF673AB7)
-                            )
-                        }
+                            IconButton(onClick = { /* Enviar comando */ }) {
+                                Icon(
+                                    imageVector = Icons.Default.PlayArrow,
+                                    contentDescription = "Enviar",
+                                    tint = Color(0xFF673AB7)
+                                )
+                            }
 
-                        // Botão de excluir
-                        IconButton(onClick = { commands.remove(command) }) { // remover comando
-                            Icon(
-                                imageVector = Icons.Default.Close,
-                                contentDescription = "Excluir",
-                                tint = Color(0xFF673AB7)
-                            )
+                            IconButton(onClick = { viewModel.deleteCommand(command) }) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = "Excluir",
+                                    tint = Color(0xFF673AB7)
+                                )
+                            }
                         }
                     }
                 }
             }
         }
 
-        // Pop-up de adicionar comando
         if (showDialog) {
             AlertDialog(
                 onDismissRequest = { showDialog = false },
@@ -146,15 +138,20 @@ fun SavedCommandsScreen(navController: NavHostController) {
                 },
                 confirmButton = {
                     TextButton(
-                        onClick = { // adicionar aqui a função de receber sinal
+                        onClick = {
                             if (newCommand.text.isNotBlank()) {
-                                commands.add(newCommand.text)
-                                newCommand = TextFieldValue("") // Limpa o campo
+                                viewModel.insertCommand(
+                                    CommandEntity(
+                                        name = newCommand.text,
+                                        signalPattern = "" // Adicione o padrão de sinal aqui
+                                    )
+                                )
+                                newCommand = TextFieldValue("")
                                 showDialog = false
                             }
                         }
                     ) {
-                        Text("Receber")
+                        Text("Salvar")
                     }
                 },
                 dismissButton = {
@@ -178,3 +175,4 @@ fun SavedCommandsScreen(navController: NavHostController) {
         }
     }
 }
+
