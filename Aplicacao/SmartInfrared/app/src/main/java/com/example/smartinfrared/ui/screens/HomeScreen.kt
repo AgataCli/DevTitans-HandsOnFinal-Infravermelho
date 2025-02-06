@@ -92,7 +92,7 @@ fun Botoes(navController: NavHostController) {
         Spacer(modifier = Modifier.width(8.dp))
         Column {
             Button(
-                colors = androidx.compose.material3.ButtonDefaults.buttonColors(Color(0xFF673AB7)),
+                colors = androidx.compose.material3.ButtonDefaults.buttonColors(Color(0xFFAF5454)),
                 onClick = {
                     try {
                         navController.navigate(Routes.COMMANDS) {
@@ -117,7 +117,7 @@ fun Botoes(navController: NavHostController) {
             Spacer(modifier = Modifier.height(8.dp))
 
             Button(
-                colors = androidx.compose.material3.ButtonDefaults.buttonColors(Color(0xFF673AB7)),
+                colors = androidx.compose.material3.ButtonDefaults.buttonColors(Color(0xFFAF5454)),
                 onClick = {
                     try {
                         navController.navigate(Routes.CREATE_CONTROL) {
@@ -159,14 +159,14 @@ fun RecentControlsList(controls: List<String>) {
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
                     .clickable { /* Ação ao clicar no controle */ }
-                    .background(Color(0xFFBB8787)),
+                    .background(Color(0xFFEDE7F6)),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = control,
                     fontSize = 20.sp,
                     modifier = Modifier.padding(16.dp),
-                    color = Color.White
+                    color = Color.Black
                 )
             }
         }

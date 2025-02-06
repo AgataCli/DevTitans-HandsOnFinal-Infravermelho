@@ -110,7 +110,7 @@ fun CommandList(
     ) {
         Header()
         Spacer(modifier = Modifier.height(16.dp))
-        Text("Adicione, Envie ou Exclua um comando:", fontSize = 16.sp)
+        Text("Adicione, envie ou exclua um comando:", fontSize = 16.sp)
         Spacer(modifier = Modifier.height(8.dp))
         LazyColumn(
             modifier = Modifier

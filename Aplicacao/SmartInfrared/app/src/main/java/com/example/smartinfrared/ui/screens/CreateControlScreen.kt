@@ -33,6 +33,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import android.widget.CheckBox
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.ui.semantics.Role.Companion.Checkbox
+import com.example.smartinfrared.navigation.Routes
 
 @Composable
 fun CreateControlScreen(navController: NavHostController) {
@@ -72,6 +78,7 @@ fun CreateControlScreen(navController: NavHostController) {
                 Spacer(modifier = Modifier.height(8.dp))
                 // Chama a lista dos Controles Salvos
                 ListaComandos()
+//                CheckboxMinimalExample()
             }
         }
 
@@ -93,9 +100,11 @@ fun CreateControlScreen(navController: NavHostController) {
 // LISTA DE CONTROLES SALVOS
 @Composable
 fun ListaComandos() {
+    // Criando a Lista dos Comandos Salvos:
     val listaComandos: List<String> = mutableListOf("Ligar TV", "Aumentar Volume", "Abaixar Volume")
-//    val checkBox : CheckBox
-//    val button: Button
+    val listaCheck = remember { mutableStateListOf(false, false, false) }
+    var checked by remember { mutableStateOf(true) }
+
     Row(
         modifier = Modifier
             .fillMaxWidth(),
@@ -105,20 +114,64 @@ fun ListaComandos() {
     ) {
         Spacer(modifier = Modifier.width(8.dp))
         Column {
-
-            listaComandos.forEach{
+            listaComandos.forEachIndexed { index, checked ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
                         .padding(8.dp)
                         .background(Color(0xFFEDE7F6))
-                        .padding(12.dp),
+                        .padding(12.dp)
+                        .selectableGroup(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(it, modifier = Modifier.weight(1f), fontSize = 16.sp, color = Color.Black)
-//                    texto = findViewById
+                    Text(
+                        listaComandos[index],
+                        modifier = Modifier.weight(1f),
+                        fontSize = 16.sp,
+                        color = Color.Black
+                    )
+                    Checkbox(
+                        checked = listaCheck[index],
+                        onCheckedChange = {listaCheck[index] = it},
+                    )
                 }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(
+                colors = ButtonDefaults.buttonColors(Color(0xFFAF5454)),
+                onClick = {
+                },
+            ) {
+                Text(
+                    text = "Criar Novo Controle",
+                    fontSize = 25.sp,
+                    modifier = Modifier.padding(15.dp),
+                    color = Color.White
+                )
             }
         }
     }
+}
+
+
+// TESTE CHECKBOX
+@Composable
+fun CheckboxMinimalExample() {
+    var checked by remember { mutableStateOf(true) }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            "Minimal checkbox"
+        )
+        Checkbox(
+            checked = checked,
+            onCheckedChange = { checked = it }
+        )
+    }
+
+    Text(
+        if (checked) "Checkbox is checked" else "Checkbox is unchecked"
+    )
 }
